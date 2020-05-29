@@ -30,6 +30,20 @@ export default class Cell {
     this.position = { x: x, y: y };
     this.color = color ? color : "white";
   }
+
+  /** Return true if x and y gived are in cell area */
+  isColised = (x: number, y: number): boolean => {
+    // If x axe match:
+    if (x >= this.position.x && x < this.position.x + this.size.w) {
+      // If y axe match:
+      if (y >= this.position.y && y < this.position.y + this.size.h) {
+        return true;
+      }
+    }
+
+    // If no match:
+    return false;
+  };
 }
 
 export const initCells = (
@@ -46,8 +60,8 @@ export const initCells = (
   let count = 0;
 
   // Make all cells with cols, row, and cell size
-  for (let col = 0; col < cols; col++) {
-    for (let row = 0; row < rows; row++) {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
       cells.push(new Cell(count, cellH, cellW, col * cellW, row * cellH));
       count += 1;
     }
@@ -56,15 +70,10 @@ export const initCells = (
   return cells;
 };
 
-export const findCellIDAtPos = (cells: Array<Cell>, x: number, y: number) => {
+export const findCellAtCoords = (cells: Array<Cell>, x: number, y: number) => {
   for (const cell of cells) {
-    if (
-      x >= cell.position.x &&
-      x < cell.position.x + cell.size.w &&
-      y >= cell.position.y &&
-      y < cell.position.y + cell.size.h
-    ) {
-      return cell.cellID;
+    if (cell.isColised(x, y)) {
+      return cell;
     }
   }
 };
