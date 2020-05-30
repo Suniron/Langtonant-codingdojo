@@ -1,9 +1,10 @@
-import Cell, { initCells, findCellAtCoords } from "Canvas/cell";
+import Cell, { initCells, findCellAtCoords, getNeighbours } from "Canvas/cell";
+import { Ant } from "Canvas/ant";
 
 const cells = initCells({ x: 1920, y: 1080 }, 10, 10);
 
 describe("Cells tests:", () => {
-  describe("initCells function...", () => {
+  describe("initCells()...", () => {
     test("should be an array", () => {
       expect(typeof cells).toBe(typeof []);
     });
@@ -63,7 +64,7 @@ describe("Cells tests:", () => {
     });
   });
 
-  describe("getCellAtPos function...", () => {
+  describe("getCellAtPos()...", () => {
     test("should be cellID = 0 for x:12 and y:15", () => {
       expect(findCellAtCoords(cells, 12, 15)?.cellID).toBe(0);
     });
@@ -85,6 +86,45 @@ describe("Cells tests:", () => {
     });
   });
 
+  describe("getNeighbours() ...", () => {
+    describe("result for cell n°11...", () => {
+      const result = getNeighbours(cells, 10, 10, cells[11]);
+      test("should have left/right/to/bottom properties", () => {
+        expect(result).toHaveProperty("left");
+        expect(result).toHaveProperty("right");
+        expect(result).toHaveProperty("top");
+        expect(result).toHaveProperty("bottom");
+      });
+      test("left neighbour cellID should be 10", () => {
+        expect(result.left.cellID).toBe(10);
+      });
+      test("right neighbour cellID should be 12", () => {
+        expect(result.right.cellID).toBe(12);
+      });
+      test("top neighbour cellID should be 1", () => {
+        expect(result.top.cellID).toBe(1);
+      });
+      test("bottom neighbour cellID should be 21", () => {
+        expect(result.bottom.cellID).toBe(21);
+      });
+    });
+    describe("result for cell n°0...", () => {
+      const result = getNeighbours(cells, 10, 10, cells[0]);
+      test("left neighbour cellID should be 9", () => {
+        expect(result.left.cellID).toBe(9);
+      });
+      test("right neighbour cellID should be 1", () => {
+        expect(result.right.cellID).toBe(1);
+      });
+      test("top neighbour cellID should be 90", () => {
+        expect(result.top.cellID).toBe(90);
+      });
+      test("bottom neighbour cellID should be 10", () => {
+        expect(result.bottom.cellID).toBe(10);
+      });
+    });
+  });
+
   describe("Cell class object...", () => {
     describe("isColised() method:", () => {
       test("should be true (cell 0)", () => {
@@ -103,4 +143,50 @@ describe("Cells tests:", () => {
   });
 });
 
-describe("Ant test:", () => {});
+describe("Ant test:", () => {
+  describe("switchDirection() method...", () => {
+    describe("direction is top and cell is white...", () => {
+      // Make an ant on a white cell
+      const whiteAnt = new Ant(cells[12]);
+      whiteAnt.cell.color = "white";
+      test("direction should become right", () => {
+        whiteAnt.switchDirection();
+        expect(whiteAnt.direction).toBe("right");
+      });
+      test("direction should become bottom", () => {
+        whiteAnt.switchDirection();
+        expect(whiteAnt.direction).toBe("bottom");
+      });
+      test("direction should become left", () => {
+        whiteAnt.switchDirection();
+        expect(whiteAnt.direction).toBe("left");
+      });
+      test("direction should become top", () => {
+        whiteAnt.switchDirection();
+        expect(whiteAnt.direction).toBe("top");
+      });
+    });
+
+    describe("direction is top and cell is black...", () => {
+      // Make an ant on a black cell
+      const blackAnt = new Ant(cells[16]);
+      blackAnt.cell.color = "black";
+      test("direction should become left", () => {
+        blackAnt.switchDirection();
+        expect(blackAnt.direction).toBe("left");
+      });
+      test("direction should become bottom", () => {
+        blackAnt.switchDirection();
+        expect(blackAnt.direction).toBe("bottom");
+      });
+      test("direction should become right", () => {
+        blackAnt.switchDirection();
+        expect(blackAnt.direction).toBe("right");
+      });
+      test("direction should become top", () => {
+        blackAnt.switchDirection();
+        expect(blackAnt.direction).toBe("top");
+      });
+    });
+  });
+});
