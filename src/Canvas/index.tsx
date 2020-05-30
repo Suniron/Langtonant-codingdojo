@@ -3,6 +3,10 @@ import Cell, { initCells, findCellAtCoords } from "./cell";
 import { draw } from "./draw";
 import { Ant } from "./ant";
 
+// SETTINGS
+const canvasRefreshSpeed = 10;
+const antSpeed = 1000;
+
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cells, setCells] = useState<Array<Cell>>();
@@ -35,22 +39,26 @@ const Canvas: React.FC = () => {
     );
   }, [cells]);
 
-  // Re-draw on cells change:
   useEffect(() => {
     if (!canvasRef.current || !cells || !ant) return;
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
 
-    draw(ctx, cells, ant);
-  }, [cells, ant]);
+    const drawInterval = setInterval(
+      () => draw(ctx, cells, ant),
+      canvasRefreshSpeed
+    );
+    // Cleaning:
+    return () => clearInterval(drawInterval);
+  }, [canvasRef, cells, ant]);
 
   // Re-draw on every ant move (and after init):
   useEffect(() => {
     if (!ant) {
       return;
     }
-    console.log("ant movement");
-    const AntMovementInterval = setInterval(() => ant.move(), 1000);
+
+    const AntMovementInterval = setInterval(() => ant.move(), antSpeed);
     // Clean:
     return () => clearInterval(AntMovementInterval);
   }, [ant]);
@@ -69,7 +77,7 @@ const Canvas: React.FC = () => {
     }
 
     // Make new Ant
-    setAnt(new Ant(cellFinded, "black"));
+    setAnt(new Ant(cellFinded));
     console.log(`Click on x:${x}, y:${y}, cellID:${cellFinded.cellID}`);
   };
 
