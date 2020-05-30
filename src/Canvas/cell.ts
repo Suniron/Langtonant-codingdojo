@@ -1,4 +1,4 @@
-type CellColor = "white" | "black" | "red";
+type CellColor = "white" | "black";
 
 export default class Cell {
   cellID: number;
@@ -14,8 +14,8 @@ export default class Cell {
     y: 0,
   };
 
-  /** cell color: white, black or red */
-  color: "white" | "black" | "red";
+  /** cell color */
+  color: "white" | "black";
 
   constructor(
     cellID: number,
@@ -76,4 +76,72 @@ export const findCellAtCoords = (cells: Array<Cell>, x: number, y: number) => {
       return cell;
     }
   }
+};
+
+/** Return left/right/top/bottom neighbours (give opposite on end of grid) */
+export const getNeighbours = (
+  cells: Array<Cell>,
+  rows: number,
+  cols: number,
+  cell: Cell
+) => {
+  let left: Cell;
+  let right: Cell;
+  let top: Cell;
+  let bottom: Cell;
+
+  // left neighbour:
+  switch (cell.cellID) {
+    case 0:
+      left = cells[cells.length - 1];
+      break;
+
+    default:
+      left = cells.find((c) => c.cellID === cell.cellID - 1) as Cell;
+      break;
+  }
+
+  // right neighbour:
+  switch (cell.cellID) {
+    case cells[0].cellID:
+      // TODO CONTINUE
+      break;
+    case cells[cells.length - 1].cellID:
+      right = cells[0];
+      break;
+
+    default:
+      right = cells.find((c) => c.cellID === cell.cellID + 1) as Cell;
+      break;
+  }
+
+  // top neighbour:
+  switch (true) {
+    case cell.cellID - rows < 0: //first line
+      // Get the number of cells which separate to the end of the row
+      const cellToRowEnd = cols - cell.cellID;
+      // Get the last cell - cellToRowEnd
+      top = cells[cells.length - 1 - cellToRowEnd];
+      break;
+
+    default:
+      top = cells.find((c) => c.cellID === cell.cellID - cols) as Cell;
+      break;
+  }
+
+  // bottom neighbour:
+  switch (true) {
+    case cell.cellID + cols > cells.length - 1: // last line
+      // Get the number of cells which separate to the end of the row
+      const cellToRowEnd = cols - cell.cellID;
+      // Get the last cell - cellToRowEnd
+      bottom = cells[cells.length - 1 - cellToRowEnd];
+      break;
+
+    default:
+      bottom = cells.find((c) => c.cellID === cell.cellID + cols) as Cell;
+      break;
+  }
+
+  return { left: left, right: right, top: top, bottom: bottom };
 };
