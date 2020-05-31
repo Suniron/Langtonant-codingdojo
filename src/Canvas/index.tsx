@@ -5,7 +5,9 @@ import { Ant } from "./ant";
 
 // SETTINGS
 const canvasRefreshSpeed = 10;
-const antSpeed = 1000;
+const antSpeed = 2;
+const GRID_ROWS = 100;
+const GRID_COLS = 100;
 
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,8 +35,8 @@ const Canvas: React.FC = () => {
               ? canvasRef.current.offsetWidth
               : canvasRef.current.offsetHeight,
         },
-        100,
-        100
+        GRID_ROWS,
+        GRID_COLS
       )
     );
   }, [cells]);
@@ -54,14 +56,16 @@ const Canvas: React.FC = () => {
 
   // Re-draw on every ant move (and after init):
   useEffect(() => {
-    if (!ant) {
-      return;
-    }
+    if (!ant) return;
+    if (!cells) return;
 
-    const AntMovementInterval = setInterval(() => ant.move(), antSpeed);
+    const AntMovementInterval = setInterval(
+      () => ant.move(cells, GRID_ROWS, GRID_COLS),
+      antSpeed
+    );
     // Clean:
     return () => clearInterval(AntMovementInterval);
-  }, [ant]);
+  });
 
   const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!canvasRef.current || !cells) return;
@@ -82,12 +86,15 @@ const Canvas: React.FC = () => {
   };
 
   return (
-    <canvas
-      height={window.innerHeight}
-      width={window.innerWidth}
-      onClick={handleClick}
-      ref={canvasRef}
-    />
+    <>
+      <h1>The Langton Ant:</h1>
+      <h2>Click on the white area... wait... and see!</h2>
+      <canvas height={500} width={500} onClick={handleClick} ref={canvasRef} />
+      <p>
+        Show the code on{" "}
+        <a href="https://github.com/Suniron/Langtonant-codingdojo">my Github</a>
+      </p>
+    </>
   );
 };
 
