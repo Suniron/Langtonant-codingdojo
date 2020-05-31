@@ -9,6 +9,11 @@ const antSpeed = 2;
 const GRID_ROWS = 100;
 const GRID_COLS = 100;
 
+const size =
+  window.innerWidth < window.innerHeight
+    ? window.innerWidth
+    : window.innerHeight;
+
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cells, setCells] = useState<Array<Cell>>();
@@ -89,7 +94,12 @@ const Canvas: React.FC = () => {
     <>
       <h1>The Langton Ant:</h1>
       <h2>Click on the white area... wait... and see!</h2>
-      <canvas height={500} width={500} onClick={handleClick} ref={canvasRef} />
+      <canvas
+        height={size}
+        width={size}
+        onClick={handleClick}
+        ref={canvasRef}
+      />
       <p>
         Show the code on{" "}
         <a href="https://github.com/Suniron/Langtonant-codingdojo">my Github</a>
