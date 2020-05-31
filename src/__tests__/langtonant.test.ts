@@ -87,14 +87,38 @@ describe("Cells tests:", () => {
   });
 
   describe("getNeighbours() ...", () => {
-    describe("result for cell n°11...", () => {
-      const result = getNeighbours(cells, 10, 10, cells[11]);
-      test("should have left/right/to/bottom properties", () => {
-        expect(result).toHaveProperty("left");
-        expect(result).toHaveProperty("right");
-        expect(result).toHaveProperty("top");
-        expect(result).toHaveProperty("bottom");
+    describe("result for cell index 0...", () => {
+      const result = getNeighbours(cells, 10, 10, cells[0]);
+      test("left neighbour cellID should be 9", () => {
+        expect(result.left.cellID).toBe(9);
       });
+      test("right neighbour cellID should be 1", () => {
+        expect(result.right.cellID).toBe(1);
+      });
+      test("top neighbour cellID should be 90", () => {
+        expect(result.top.cellID).toBe(90);
+      });
+      test("bottom neighbour cellID should be 10", () => {
+        expect(result.bottom.cellID).toBe(10);
+      });
+    });
+    describe("result for cell index 9...", () => {
+      const result = getNeighbours(cells, 10, 10, cells[9]);
+      test("left neighbour cellID should be 8", () => {
+        expect(result.left.cellID).toBe(8);
+      });
+      test("right neighbour cellID should be 0", () => {
+        expect(result.right.cellID).toBe(0);
+      });
+      test("top neighbour cellID should be 99", () => {
+        expect(result.top.cellID).toBe(99);
+      });
+      test("bottom neighbour cellID should be 19", () => {
+        expect(result.bottom.cellID).toBe(19);
+      });
+    });
+    describe("result for cell index 11...", () => {
+      const result = getNeighbours(cells, 10, 10, cells[11]);
       test("left neighbour cellID should be 10", () => {
         expect(result.left.cellID).toBe(10);
       });
@@ -108,19 +132,19 @@ describe("Cells tests:", () => {
         expect(result.bottom.cellID).toBe(21);
       });
     });
-    describe("result for cell n°0...", () => {
-      const result = getNeighbours(cells, 10, 10, cells[0]);
-      test("left neighbour cellID should be 9", () => {
-        expect(result.left.cellID).toBe(9);
+    describe("result for cell index 99...", () => {
+      const result = getNeighbours(cells, 10, 10, cells[99]);
+      test("left neighbour cellID should be 98", () => {
+        expect(result.left.cellID).toBe(98);
       });
-      test("right neighbour cellID should be 1", () => {
-        expect(result.right.cellID).toBe(1);
+      test("right neighbour cellID should be 90", () => {
+        expect(result.right.cellID).toBe(90);
       });
-      test("top neighbour cellID should be 90", () => {
-        expect(result.top.cellID).toBe(90);
+      test("top neighbour cellID should be 89", () => {
+        expect(result.top.cellID).toBe(89);
       });
-      test("bottom neighbour cellID should be 10", () => {
-        expect(result.bottom.cellID).toBe(10);
+      test("bottom neighbour cellID should be 9", () => {
+        expect(result.bottom.cellID).toBe(9);
       });
     });
   });

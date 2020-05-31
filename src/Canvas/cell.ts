@@ -91,22 +91,21 @@ export const getNeighbours = (
   let bottom: Cell;
 
   // left neighbour:
-  switch (cell.cellID) {
-    case 0:
-      left = cells[cells.length - 1];
+  switch (true) {
+    case cell.cellID % cols === 0:
+      left = cells[cell.cellID + cols - 1];
       break;
-
     default:
       left = cells.find((c) => c.cellID === cell.cellID - 1) as Cell;
       break;
   }
 
   // right neighbour:
-  switch (cell.cellID) {
-    case cells[0].cellID:
-      // TODO CONTINUE
+  switch (true) {
+    case (cell.cellID + 1) % cols === 0:
+      right = cells[cell.cellID - cols + 1];
       break;
-    case cells[cells.length - 1].cellID:
+    case cells[cells.length - 1].cellID === cell.cellID:
       right = cells[0];
       break;
 
@@ -117,13 +116,12 @@ export const getNeighbours = (
 
   // top neighbour:
   switch (true) {
-    case cell.cellID - rows < 0: //first line
+    case cell.cellID < cols: // first line
       // Get the number of cells which separate to the end of the row
       const cellToRowEnd = cols - cell.cellID;
       // Get the last cell - cellToRowEnd
-      top = cells[cells.length - 1 - cellToRowEnd];
+      top = cells[cells.length - cellToRowEnd];
       break;
-
     default:
       top = cells.find((c) => c.cellID === cell.cellID - cols) as Cell;
       break;
@@ -131,11 +129,11 @@ export const getNeighbours = (
 
   // bottom neighbour:
   switch (true) {
-    case cell.cellID + cols > cells.length - 1: // last line
+    case cell.cellID + rows > cells.length: // last line
       // Get the number of cells which separate to the end of the row
-      const cellToRowEnd = cols - cell.cellID;
+      const cellToRowEnd = cell.cellID + cols - cells.length;
       // Get the last cell - cellToRowEnd
-      bottom = cells[cells.length - 1 - cellToRowEnd];
+      bottom = cells[cellToRowEnd];
       break;
 
     default:
