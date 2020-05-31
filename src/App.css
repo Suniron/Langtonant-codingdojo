@@ -1,3 +1,11 @@
+html {
+  background-color: darkolivegreen;
+}
+
+canvas {
+  background-color: white;
+}
+
 .App {
   text-align: center;
 }
