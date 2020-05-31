@@ -167,7 +167,7 @@ describe("Cells tests:", () => {
   });
 });
 
-describe("Ant test:", () => {
+describe("Ant tests:", () => {
   describe("switchDirection() method...", () => {
     describe("direction is top and cell is white...", () => {
       // Make an ant on a white cell
@@ -210,6 +210,65 @@ describe("Ant test:", () => {
       test("direction should become top", () => {
         blackAnt.switchDirection();
         expect(blackAnt.direction).toBe("top");
+      });
+    });
+  });
+
+  describe("changeCurrentCellColor() method ...", () => {
+    const ant = new Ant(cells[11]);
+
+    test("white cell should become black", () => {
+      // Force ant cell color:
+      ant.cell.color = "white";
+      // Change ant cell color:
+      ant.changeCurrentCellColor();
+      expect(ant.cell.color).toBe("black");
+    });
+
+    test("black cell should become white", () => {
+      // Force ant cell color:
+      ant.cell.color = "black";
+      // Change ant cell color:
+      ant.changeCurrentCellColor();
+      expect(ant.cell.color).toBe("white");
+    });
+  });
+
+  describe("go() method ...", () => {
+    const ant = new Ant(cells[11]);
+
+    describe("ant is on cell index 0", () => {
+      test("should ant.cell.cellID become 90 when direction is top", () => {
+        // Force ant cell & direction:
+        ant.cell = cells[0];
+        ant.direction = "top";
+        // Change ant cell color:
+        ant.go(cells, 10, 10);
+        expect(ant.cell.cellID).toBe(90);
+      });
+      test("should ant.cell.cellID become 10 when direction is bottom", () => {
+        // Force ant cell & direction:
+        ant.cell = cells[0];
+        ant.direction = "bottom";
+        // Change ant cell color:
+        ant.go(cells, 10, 10);
+        expect(ant.cell.cellID).toBe(10);
+      });
+      test("should ant.cell.cellID become 9 when direction is left", () => {
+        // Force ant cell & direction:
+        ant.cell = cells[0];
+        ant.direction = "left";
+        // Change ant cell color:
+        ant.go(cells, 10, 10);
+        expect(ant.cell.cellID).toBe(9);
+      });
+      test("should ant.cell.cellID become 1 when direction is right", () => {
+        // Force ant cell & direction:
+        ant.cell = cells[0];
+        ant.direction = "right";
+        // Change ant cell color:
+        ant.go(cells, 10, 10);
+        expect(ant.cell.cellID).toBe(1);
       });
     });
   });
