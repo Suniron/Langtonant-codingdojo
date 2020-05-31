@@ -1,4 +1,4 @@
-import Cell from "./cell";
+import Cell, { getNeighbours } from "./cell";
 
 type Direction = "top" | "bottom" | "left" | "right";
 export class Ant {
@@ -10,9 +10,11 @@ export class Ant {
     this.cell = cell;
   }
 
-  move = () => {
+  move = (cells: Array<Cell>, rows: number, cols: number) => {
     // Change direction:
     this.switchDirection();
+    this.changeCurrentCellColor();
+    this.go(cells, rows, cols);
   };
 
   /** Change direction depend of cell color and current direction */
@@ -39,6 +41,29 @@ export class Ant {
         case "right":
           return (this.direction = "top");
       }
+    }
+  };
+
+  changeCurrentCellColor = () => {
+    if (this.cell.color === "white") {
+      return (this.cell.color = "black");
+    }
+    this.cell.color = "white";
+  };
+
+  go = (cells: Array<Cell>, rows: number, cols: number) => {
+    const neighbours = getNeighbours(cells, rows, cols, this.cell);
+    switch (this.direction) {
+      case "top":
+        return (this.cell = neighbours.top);
+      case "bottom":
+        return (this.cell = neighbours.bottom);
+      case "left":
+        return (this.cell = neighbours.left);
+      case "right":
+        return (this.cell = neighbours.right);
+      default:
+        break;
     }
   };
 }
